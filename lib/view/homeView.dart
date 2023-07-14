@@ -1,4 +1,6 @@
+import 'package:chat_app/view/chatRoom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +13,10 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   TextEditingController search = TextEditingController();
-  bool isLoading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Map<String, dynamic> userMap = {};
+
+  bool isLoading = false;
 
   void onSearch() async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,11 +38,11 @@ class _HomeViewState extends State<HomeView> {
         userMap = combinedResults[0].data();
         isLoading = false;
       });
+      search.clear();
       print(userMap);
     } else {
-      print('User not found');
+      print('User are found');
     }
-
   }
 
   @override
@@ -109,7 +113,11 @@ class _HomeViewState extends State<HomeView> {
                         elevation: 0.7,
                         child: InkWell(
                           child: ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => Chat()),
+                              );
+                            },
                             leading: Icon(CupertinoIcons.person),
                             title: Text(userMap['name']),
                             subtitle: Text(

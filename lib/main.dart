@@ -1,5 +1,7 @@
+
 import 'package:chat_app/view/homeView.dart';
 import 'package:chat_app/view/signUp.dart';
+// import 'package:chat_app/view/signUp.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Chat App',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.deepPurple,
               ))),
-      home: HomeView(),
+      home: SignUp(),
     );
   }
 }
