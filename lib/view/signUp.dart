@@ -1,3 +1,4 @@
+import 'package:chat_app/view/authFunction.dart';
 import 'package:chat_app/view/login.dart';
 import 'package:chat_app/widgets/button.dart';
 import 'package:chat_app/widgets/passwordField_widget.dart';
@@ -65,7 +66,7 @@ class _SignUpState extends State<SignUp> {
                       Icons.lock,
                       color: Colors.deepPurple.shade700,
                     )),
-                ButtonWidget(buttonText: 'Sign Up', onTap:  createAccount   ),
+                ButtonWidget(buttonText: 'Sign Up', onTap:  Servicesfnc.createAccount(email.text, password.text, context),),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -94,34 +95,6 @@ class _SignUpState extends State<SignUp> {
   }
 
  
-
- createAccount() async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email.text,
-        password: password.text,
-      
-      );
-
-      // final CollectionReference users =
-      //     FirebaseFirestore.instance.collection('users');
-      // users.add({
-      //   'email': email,
-      //   'password': password,
-      //   'name': usertextfield,
-      //   'status': "Unavalible",
-      // });
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LogIn(),
-          ));
-    } on FirebaseAuthException catch (e) {
-      print("User SignIn");
-      ErrorBox(context, e);
-    }
-  }
 
 
 }
