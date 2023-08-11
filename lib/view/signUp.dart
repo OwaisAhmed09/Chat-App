@@ -1,8 +1,11 @@
-
 import 'package:chat_app/view/login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chat_app/widgets/button.dart';
+import 'package:chat_app/widgets/passwordField_widget.dart';
+import 'package:chat_app/widgets/textfield_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,134 +18,55 @@ class _SignUpState extends State<SignUp> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController usertextfield = TextEditingController();
-  TextEditingController Unavalible = TextEditingController();
   bool _obsecureText = true;
-
   var results;
 
 
-  create() async {
   
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email.text,
-        password: password.text,
-      );
-
-      final CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
-      users.add({
-        'email': email.text,
-        'password': password.text,
-        'name': usertextfield.text,
-        'status': "Unavalible",
-      });
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LogIn(),
-          ));
-
-      if (users != null) {
-        print("Account create successfully");
-        return users;
-      } else {
-        print("Account Failed");
-        return users;
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 50),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
+                LottieBuilder.asset('assets/lottie/signUp.json'),
                 Container(
-                  child: const Text(
-                    "Crate Account",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  child: Text(
+                    "Create Account",
+                    style: GoogleFonts.josefinSans(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey.shade500,
+                        letterSpacing: 1),
                   ),
                 ),
-                const SizedBox(height: 30),
-                TextField(
-                  controller: usertextfield,
-                  decoration: const InputDecoration(
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                TextFieldWidget(
+                    controller: usertextfield,
+                    hintText: 'Enter Username . . .',
+                    iconData: Icon(
+                      Icons.person,
+                      color: Colors.deepPurple.shade700,
                     )),
-                    suffixIcon: Padding(
-                      padding: EdgeInsets.only(right: 20.0, top: 6),
-                      child: Text("Abc"),
-                    ),
-                    prefixIcon: Icon(Icons.person),
-                    hintText: "Enter UserName",
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: email,
-                  decoration: const InputDecoration(
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                TextFieldWidget(
+                    controller: email,
+                    hintText: 'Enter Email . . .',
+                    iconData: Icon(
+                      Icons.email,
+                      color: Colors.deepPurple.shade700,
                     )),
-                    suffixIcon: Padding(
-                      padding: EdgeInsets.only(right: 20.0, top: 6),
-                      child: Text("@abc.com"),
-                    ),
-                    prefixIcon: Icon(Icons.person),
-                    hintText: "Enter Em@il",
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: password,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
+                PasswordFieldWidget(
+                    controller: password,
+                    hintText: 'Create Password . . .',
+                    iconprefix: Icon(
+                      Icons.lock,
+                      color: Colors.deepPurple.shade700,
                     )),
-                    hintText: "Enter Password",
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _obsecureText = !_obsecureText;
-                          });
-                        },
-                        child: Icon(_obsecureText
-                            ? Icons.visibility
-                            : Icons.visibility_off_outlined),
-                      ),
-                    ),
-                    prefixIcon: const Icon(Icons.lock),
-                  ),
-                ),
-                SizedBox(height: 50),
-                ElevatedButton(
-                    onPressed: () {
-                      create();
-
-                      print("account create");
-                    },
-                    child: const Text("SignUP")),
-                SizedBox(height: 10),
+                ButtonWidget(buttonText: 'Sign Up', onTap:  createAccount   ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -168,4 +92,36 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+
+ 
+
+ createAccount() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text,
+        password: password.text,
+      
+      );
+
+      // final CollectionReference users =
+      //     FirebaseFirestore.instance.collection('users');
+      // users.add({
+      //   'email': email,
+      //   'password': password,
+      //   'name': usertextfield,
+      //   'status': "Unavalible",
+      // });
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LogIn(),
+          ));
+    } on FirebaseAuthException catch (e) {
+      print("User SignIn");
+      ErrorBox(context, e);
+    }
+  }
+
+
 }
